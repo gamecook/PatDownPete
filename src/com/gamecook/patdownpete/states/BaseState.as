@@ -19,63 +19,65 @@
  */
 
 package com.gamecook.patdownpete.states {
+import com.gamecook.patdownpete.managers.AssetManager;
+import com.gamecook.patdownpete.managers.SingletonManager;
+import com.gamecook.patdownpete.managers.StateManager;
 import com.gamecook.patdownpete.score.PatDownPeteScoreboard;
 
+import flash.display.Sprite;
+import flash.events.Event;
 import flash.events.TimerEvent;
 
-import org.flixel.FlxG;
-import org.flixel.FlxSprite;
-import org.flixel.FlxState;
-import org.flixel.FlxText;
+public class BaseState extends Sprite {
 
-public class BaseState extends FlxState {
     protected var scoreboard:PatDownPeteScoreboard;
-    protected var scoreTxt:FlxText;
     protected var nextScreen:Class;
-    //protected var nextScreenTimer:Timer;
-
     protected var nextScreenCounter:Number = 0;
     protected var nextScreenDelay:Number = 0;
-
+    protected var stateManager:StateManager = SingletonManager.getClassReference(StateManager) as StateManager;
+    protected var assetManager:AssetManager = SingletonManager.getClassReference(AssetManager) as AssetManager;
 
     public function BaseState() {
         super();
+        addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
+        create();
     }
 
-    override public function create():void {
-        super.create();
+    protected function onAddedToStage(event:Event):void {
+        removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+        addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true);
+
+        // Add more added logic here
+    }
+
+    protected function onRemovedFromStage(event:Event):void {
+        removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+        addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
+
+        // Add more remove logic here
+    }
+
+    public function create():void {
 
         scoreboard = new PatDownPeteScoreboard();
-
-        var demoTXT:FlxText = add(new FlxText((FlxG.width - 200) * .5, 0, 200, "HI-SCORE").setFormat(null, 18, 0xffffff, "center")) as FlxText;
-        var highScore:FlxText = add(new FlxText(demoTXT.x, demoTXT.y + demoTXT.height, 200, scoreboard.getScore(0).score).setFormat(null, 18, 0xffe00000, "center")) as FlxText;
-        var scoreLabel:FlxText = add(new FlxText(demoTXT.x - 100, 0, 100, "Score").setFormat(null, 18, 0xffffff, "right")) as FlxText;
-        scoreTxt = add(new FlxText(scoreLabel.x - 50, scoreLabel.height, 150, FlxG.score.toString()).setFormat(null, 18, 0xffe00000, "right")) as FlxText;
     }
 
-    protected function startNextScreenTimer(value:Class, delay:int = 15):void {
+    protected function startNextScreenTimer(state:Class, delay:int = 15):void {
         nextScreenDelay = delay;
-
-        CONFIG::mobile
-        {
-            nextScreenDelay = nextScreenDelay / 2;
-        }
-
-        nextScreen = value;
+        nextScreen = state;
     }
 
     protected function onNextScreen(event:TimerEvent = null):void {
-        FlxG.state = new nextScreen();
+        stateManager.state = new nextScreen();
     }
 
-    override public function update():void {
+    public function update(elapsed:Number = 0):void {
         if (nextScreen) {
-            nextScreenCounter += FlxG.elapsed;
+            nextScreenCounter += elapsed;
             if (nextScreenCounter >= nextScreenDelay)
                 onNextScreen();
         }
-
-        super.update();
     }
+
 }
 }

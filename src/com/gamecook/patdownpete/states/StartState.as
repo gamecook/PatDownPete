@@ -6,26 +6,28 @@
  * To change this template use File | Settings | File Templates.
  */
 package com.gamecook.patdownpete.states {
-import com.gamecook.patdownpete.sprites.GameAssets;
-
-import org.flixel.FlxG;
-import org.flixel.FlxSprite;
 
 public class StartState extends BaseState{
 
-    private var startMask:FlxSprite;
+    //private var startMask:FlxSprite;
     private var flickerTime:int = 0;
     private const FLICKER_DELAY:int = 100;
+    private var counter:int = 0;
 
     public function StartState() {
-        bgColor = 0x0000000;
+
+        addChild(assetManager.getBitmap("StartStateBG"));
+        /*bgColor = 0x0000000;
+
 
         var sprite:FlxSprite = new FlxSprite(0, 0, GameAssets.StartStateBG);
         add(sprite);
 
         startMask = new FlxSprite(140,750);
         startMask.createGraphic(200,40,0xFF65c5d8);
-        add(startMask);
+        add(startMask);*/
+
+        nextScreenCounter = 1000;
     }
 
     override public function create():void {
@@ -34,9 +36,16 @@ public class StartState extends BaseState{
         flickerTime = FLICKER_DELAY;
     }
 
-    override public function update():void
+    override public function update(elapsed:Number = 0):void
     {
-        if (FlxG.mouse.justPressed())
+        nextScreenCounter -= elapsed;
+
+        if (nextScreenCounter <= 0)
+        {
+            trace("Next Screen");
+            nextScreenCounter = 1000;
+        }
+        /*if (FlxG.mouse.justPressed())
             onClick();
 
         flickerTime -= FlxG.elapsed;
@@ -46,11 +55,11 @@ public class StartState extends BaseState{
             flickerTime = FLICKER_DELAY;
         }
 
-        super.render();
+        super.render();*/
     }
 
     private function onClick():void {
-        FlxG.state = new GameState();
+        //FlxG.state = new GameState();
     }
 }
 }
