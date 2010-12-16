@@ -19,6 +19,9 @@ public class AssetManager extends Object{
     [Embed(source="../../../../../build/assets/GameStateBG.jpg")]
     private var GameStateBG:Class;
 
+    [Embed(source="../../../../../build/assets/color_map.png")]
+    private var ColorMap:Class;
+
     public function getBitmap(id:String):Bitmap
     {
         if (!hasItem(id)) {

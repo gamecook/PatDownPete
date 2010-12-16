@@ -20,6 +20,7 @@
 
 package com.gamecook.patdownpete.states {
 import com.gamecook.patdownpete.managers.AssetManager;
+import com.gamecook.patdownpete.managers.MouseManager;
 import com.gamecook.patdownpete.managers.SingletonManager;
 import com.gamecook.patdownpete.managers.StateManager;
 import com.gamecook.patdownpete.score.PatDownPeteScoreboard;
@@ -36,6 +37,7 @@ public class BaseState extends Sprite {
     protected var nextScreenDelay:Number = 0;
     protected var stateManager:StateManager = SingletonManager.getClassReference(StateManager) as StateManager;
     protected var assetManager:AssetManager = SingletonManager.getClassReference(AssetManager) as AssetManager;
+    protected var mouseManager:MouseManager = SingletonManager.getClassReference(MouseManager) as MouseManager;
 
     public function BaseState() {
         super();

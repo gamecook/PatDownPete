@@ -6,6 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 package com.gamecook.patdownpete {
+import com.gamecook.patdownpete.managers.MouseManager;
 import com.gamecook.patdownpete.managers.SingletonManager;
 import com.gamecook.patdownpete.managers.StateManager;
 import com.gamecook.patdownpete.states.BaseState;
@@ -13,6 +14,7 @@ import com.gamecook.patdownpete.states.BaseState;
 import com.gamecook.patdownpete.utils.FrameCounter;
 
 import flash.display.Sprite;
+import flash.events.Event;
 import flash.events.TimerEvent;
 import flash.utils.Timer;
 import flash.utils.getTimer;
@@ -32,6 +34,7 @@ public class PatDownPeteGame extends Sprite {
     private var gameTimer:Timer;
     private var frameTimer:FrameCounter;
     private var stateManager:StateManager = SingletonManager.getClassReference(StateManager) as StateManager;
+    protected var mouseManager:MouseManager = SingletonManager.getClassReference(MouseManager) as MouseManager;
 
     public function PatDownPeteGame(x:int, y:int, state:Class, scale:Number = 1) {
         this.x = defaultX = x;
@@ -46,6 +49,14 @@ public class PatDownPeteGame extends Sprite {
         gameTimer = new Timer(period, 1); //changed in part 3 from 50
         gameTimer.addEventListener(TimerEvent.TIMER, runGame);
         frameTimer = new FrameCounter();
+
+        addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+    }
+
+    private function onAddedToStage(event:Event):void {
+        removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+
+        mouseManager.activate(stage);
     }
 
     private function runGame(event:TimerEvent):void {

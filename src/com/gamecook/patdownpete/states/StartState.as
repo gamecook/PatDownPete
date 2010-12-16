@@ -45,9 +45,10 @@ public class StartState extends BaseState{
             trace("Next Screen");
             nextScreenCounter = 1000;
         }
-        /*if (FlxG.mouse.justPressed())
+        if (mouseManager.isMouseDown)
             onClick();
 
+        /*
         flickerTime -= FlxG.elapsed;
         if (flickerTime <= 0)
         {
@@ -59,7 +60,8 @@ public class StartState extends BaseState{
     }
 
     private function onClick():void {
-        //FlxG.state = new GameState();
+        stateManager.state = GameState;
+        trace("Mouse Down");
     }
 }
 }

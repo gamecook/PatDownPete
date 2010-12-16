@@ -54,7 +54,7 @@ package  com.gamecook.patdownpete.utils{
 
 		}
 
-		function frameCounter(e:TimerEvent):void {
+		public function frameCounter(e:TimerEvent):void {
 			messageText=framesCounted.toString();
 			messageTextField.text=messageText;
             trace("FPS", messageText);
@@ -62,11 +62,11 @@ package  com.gamecook.patdownpete.utils{
 			framesCounted=0;
 		}
 
-		function countFrames():void {
+		public function countFrames():void {
 			framesCounted++;
 		}
 
-		function render():void {
+		public function render():void {
 			/*format.size=12;
 			format.font="Arial";
 			format.color="0xffffff";
