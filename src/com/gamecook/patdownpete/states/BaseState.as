@@ -18,68 +18,86 @@
  * THE SOFTWARE.
  */
 
-package com.gamecook.patdownpete.states {
-import com.gamecook.patdownpete.managers.AssetManager;
-import com.gamecook.patdownpete.managers.MouseManager;
-import com.gamecook.patdownpete.managers.SingletonManager;
-import com.gamecook.patdownpete.managers.StateManager;
-import com.gamecook.patdownpete.score.PatDownPeteScoreboard;
+package com.gamecook.patdownpete.states
+{
+    import com.gamecook.patdownpete.factories.TextFieldFactory;
+    import com.gamecook.patdownpete.managers.AssetManager;
+    import com.gamecook.patdownpete.managers.MouseManager;
+    import com.gamecook.patdownpete.managers.SingletonManager;
+    import com.gamecook.patdownpete.managers.StateManager;
+    import com.gamecook.patdownpete.score.PatDownPeteScoreboard;
 
-import flash.display.Sprite;
-import flash.events.Event;
-import flash.events.TimerEvent;
+    import flash.display.Sprite;
+    import flash.events.Event;
+    import flash.events.TimerEvent;
 
-public class BaseState extends Sprite {
+    public class BaseState extends Sprite
+    {
 
-    protected var scoreboard:PatDownPeteScoreboard;
-    protected var nextScreen:Class;
-    protected var nextScreenCounter:Number = 0;
-    protected var nextScreenDelay:Number = 0;
-    protected var stateManager:StateManager = SingletonManager.getClassReference(StateManager) as StateManager;
-    protected var assetManager:AssetManager = SingletonManager.getClassReference(AssetManager) as AssetManager;
-    protected var mouseManager:MouseManager = SingletonManager.getClassReference(MouseManager) as MouseManager;
+        protected var scoreboard:PatDownPeteScoreboard;
+        protected var nextScreen:Class;
+        protected var nextScreenCounter:Number = 0;
+        protected var nextScreenDelay:Number = 0;
+        protected var stateManager:StateManager = SingletonManager.getClassReference(StateManager) as StateManager;
+        protected var assetManager:AssetManager = SingletonManager.getClassReference(AssetManager) as AssetManager;
+        protected var mouseManager:MouseManager = SingletonManager.getClassReference(MouseManager) as MouseManager;
+        protected var textFieldFactory:TextFieldFactory = SingletonManager.getClassReference(TextFieldFactory) as TextFieldFactory;
 
-    public function BaseState() {
-        super();
-        addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
-        create();
-    }
-
-    protected function onAddedToStage(event:Event):void {
-        removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-        addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true);
-
-        // Add more added logic here
-    }
-
-    protected function onRemovedFromStage(event:Event):void {
-        removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-        addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
-
-        // Add more remove logic here
-    }
-
-    public function create():void {
-
-        scoreboard = new PatDownPeteScoreboard();
-    }
-
-    protected function startNextScreenTimer(state:Class, delay:int = 15):void {
-        nextScreenDelay = delay;
-        nextScreen = state;
-    }
-
-    protected function onNextScreen(event:TimerEvent = null):void {
-        stateManager.state = new nextScreen();
-    }
-
-    public function update(elapsed:Number = 0):void {
-        if (nextScreen) {
-            nextScreenCounter += elapsed;
-            if (nextScreenCounter >= nextScreenDelay)
-                onNextScreen();
+        public function BaseState()
+        {
+            super();
+            addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
+            create();
         }
-    }
 
-}
+        protected function onAddedToStage(event:Event):void
+        {
+            removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+            addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true);
+
+            // Add more added logic here
+        }
+
+        protected function onRemovedFromStage(event:Event):void
+        {
+            removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+            addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
+
+            // Add more remove logic here
+        }
+
+        public function create():void
+        {
+
+            scoreboard = new PatDownPeteScoreboard();
+        }
+
+        protected function startNextScreenTimer(state:Class, delay:int = 15):void
+        {
+            nextScreenDelay = delay;
+            nextScreen = state;
+        }
+
+        protected function onNextScreen(event:TimerEvent = null):void
+        {
+            stateManager.state = new nextScreen();
+        }
+
+        public function update(elapsed:Number = 0):void
+        {
+            if (nextScreen)
+            {
+                nextScreenCounter += elapsed;
+                if (nextScreenCounter >= nextScreenDelay)
+                    onNextScreen();
+            }
+
+            render();
+        }
+
+        protected function render():void
+        {
+        }
+
+    }
 }

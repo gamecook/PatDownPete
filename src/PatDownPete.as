@@ -33,7 +33,7 @@ public class PatDownPete extends Sprite {
         trace("Hello");
         game.activate();
 
-        addChild( new Stats() );
+        //addChild( new Stats() );
     }
 
     private function configureStage():void {
